@@ -37,7 +37,7 @@ require_once "config.php";
                      <td>User Phone 1</td>
                      <td>User phone 2</td>
                      <td>Dues</td>
-                     <td>Delete</td>
+                     <td>Leave the apartment</td>
                  </tr>
                  
                  <?php
@@ -54,8 +54,8 @@ require_once "config.php";
                         echo "<td>".$row['doornumber']."</td>";
                         echo "<td>".$row['userphone1']."</td>";
                         echo "<td>".$row['userphone2']."</td>";
-                        echo "<td>".$row['dues']."</td>";
-                        echo "<td><a href=userdelete.php?id=".$row['id'].">Delete</a></td>"; 
+                        echo "<td>".$row['dues']." TL"."</td>";
+                        echo "<td><a href=userdelete.php?id=".$row['id'].">Remove From Apartment</a></td>"; 
                         }
                     }
 
