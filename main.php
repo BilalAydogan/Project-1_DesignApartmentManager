@@ -43,6 +43,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             <nav class="navbar navbar-expand-sm bg-light">
                 <ul>
                     <li><a href="main.php"><i class="fas fa-home"></i>Home Page</a></li>
+                    <li><a href="showdues.php"><i class="fas fa-wallet"></i>Show All Paid Dues</a></li>
                 </ul>
             </nav>
             

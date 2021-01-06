@@ -8,7 +8,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 <?php
 require_once "config.php";
- $paydues ="";
+ $paydues = $username= $year=$month="";
  $paydues_err="";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
      if(empty(trim($_POST["paydues"]))){
@@ -17,21 +17,32 @@ require_once "config.php";
      else{
          $paydues=trim($_POST["paydues"]);
      }
+     if(!empty(trim($_SESSION["username"]))){
+         $username=trim($_SESSION["username"]);
+     }
+     if(!empty(trim($_POST["year"]))){
+         $year=trim($_POST["year"]);
+     }
+     if(!empty(trim($_POST["month"]))){
+         $month=trim($_POST["month"]);
+     }
      
      if(empty($paydues_err)){
-         $sql="UPDATE users SET dues = '$paydues'";
-         if($stmt = $mysqli->prepare($sql)){
-             $stmt->bind_param("i", $param_paydues);
-             $param_paydues=paydues;
-             if($stmt->execute()){
-                header("location: welcome.php");
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
-            $stmt->close();
+         $username = $_SESSION['username'];
+         $year=$_POST['year'];
+         $month=$_POST['month'];
+         $paydues=$_POST['paydues'];
+         $sql="UPDATE users SET dues ='0' WHERE username='$username'";
+         $sql1="INSERT INTO duespaid (username, month, year, paydues) VALUES ('$username','$month','$year','$paydues')";
+         if(mysqli_query($mysqli,$sql)){
+             if(mysqli_query($mysqli,$sql1)){
+                 header("location: welcome.php");
+             }
+         }
+         else{
+             header("location: main.php");
          }
      }
-     $mysqli->close();
      
  }
 ?>
@@ -55,11 +66,37 @@ require_once "config.php";
 <body>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
    <div class="wrapper">
-   <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
+   <div class="form-group ">
+                <label>User Name</label>
+                <input type="text" name="username" class="form-control" value="<?php echo $_SESSION['username']?>">
+           </div>
+           <div class="form-group" >
+            <label >Please choose month</label>
+            <select name="month" class="form-control">
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April </option>
+              <option value="May">May </option>
+              <option value="June">June </option>
+              <option value="July">July </option>
+              <option value="August">August </option> 
+              <option value="September">September </option>
+              <option value="October">October </option>
+              <option value="November">November </option>
+              <option value="December">December </option>
+            </select>
+            </div>
+            <div class="form-group ">
+                <label>Year</label>
+                <input type="text" name="year" class="form-control" value="2021">
+           </div>
+       <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
                 <label>Pay Dues</label>
                 <input type="text" name="paydues" class="form-control">
                 <span class="help-block"><?php echo $paydues_err; ?></span>
        </div>
+       
    </div>
    <div class="form-group">
     <input type="submit" class="btn btn-primary" value="Submit">

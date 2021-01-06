@@ -67,6 +67,7 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
                 <ul>
                     <li><a href="adminmain.php"><i class="fas fa-home"></i>Home Page</a></li>
                     <li><a href="updatedues.php"><i class="fas fa-wallet"></i>Add Dues</a></li>
+                    <li><a href="alldues.php"><i class="fas fa-list"></i>All Dues History</a></li>
                 </ul>
                 
             </nav>
