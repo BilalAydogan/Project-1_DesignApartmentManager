@@ -54,7 +54,7 @@ require_once "config.php";
                         echo "<td>".$row['month']."</td>";
                         echo "<td>".$row['year']."</td>";
                         echo "<td>".$row['paydues']." TL"."</td>";
-                        echo "<td>".$row['created_at']." TL"."</td>"; 
+                        echo "<td>".$row['created_at']."</td>"; 
                         }
                     }
 
