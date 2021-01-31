@@ -83,53 +83,61 @@ require_once "config.php";
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-       
-    <div class="container">
+  <div class="container">
        <div class="row  justify-content-center">
           <div class="col">
              <table class="table table-bordered table-striped table-white">
-                 <tr>
-                     <td>User Id</td>    
-                     <td>User Name</td>
-                     <td>Door Number</td>
-                     <td>User Phone 1</td>
-                     <td>User phone 2</td>
-                     <td>Dues</td>
-                     <td>Joining Time</td>
-                     <td>Leaving Time</td>
-                 </tr>
-                 
-                 <?php
-                    $sql = "SELECT * FROM leavingusers;";
+   <tr>
+       <td>Total Expected Income</td>
+       <td>Total Money Currently Owned</td>
+   </tr>
+                <?php
+
+                    $sql = "SELECT SUM(dues) as all_income FROM users";
+                                $result = mysqli_query($mysqli, $sql);
+                                $rescheck = mysqli_num_rows($result);
+
+                            if($rescheck > 0){
+                                while($row = mysqli_fetch_assoc($result)){
+                                       echo "<td>".$row['all_income']." ₺"."</td>";
+
+                                }
+                                }
+                ?>
+                <?php
+                  $sql = "SELECT SUM(paydues) as all_income FROM duespaid";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
-
+    
                 if($rescheck > 0){
                     while($row = mysqli_fetch_assoc($result)){
-                        
-                        echo "<tr>";
-                        echo "<td>".$row['id']."</td>";
-                        echo "<td>".$row['username']."</td>";
-                        echo "<td>".$row['doornumber']."</td>";
-                        echo "<td>".$row['userphone1']."</td>";
-                        echo "<td>".$row['userphone2']."</td>";
-                        echo "<td>".$row['dues']."</td>";
-                        echo "<td>".$row['created_at']."</td>";
-                        echo "<td>".$row['leaving_time']."</td>";
-                        }
+                           $x=$row['all_income'];
+                       
                     }
+                    }
+                    $sql = "SELECT SUM(cost) as all_income FROM expense";
+                    $result = mysqli_query($mysqli, $sql);
+                    $rescheck = mysqli_num_rows($result);
+    
+                if($rescheck > 0){
+                    while($row = mysqli_fetch_assoc($result)){
+                           $y=$row['all_income'];
+                       
+                    }
+                    }
+                 $z = $x-$y;
+                 echo "<td>".$z." ₺"."</td>";
+                 ?>
 
-                ?>
-             </table>
-              
+               
+               
+        </table>
           </div>
-           
        </div>
+       </div>
+    
+    
         
-    </div>
-    <div class="container" >
-    <a href="adminmain.php" class="btn btn-primary">Back</a>
-    </div>
 </main>
             
 </section>

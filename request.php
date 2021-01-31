@@ -4,51 +4,48 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
+?>
+<?php
 require_once "config.php";
-$new_password = $confirm_password = "";
-$new_password_err = $confirm_password_err = "";
+
+$title = $content="";
+$title_err = $content_err="";
+
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    if(empty(trim($_POST["new_password"]))){
-        $new_password_err = "Please enter the new password.";     
-    } elseif(strlen(trim($_POST["new_password"])) < 6){
-        $new_password_err = "Password must have atleast 6 characters.";
-    } else{
-        $new_password = trim($_POST["new_password"]);
+    
+    if(empty(trim($_POST["title"]))){
+        $title_err = "Please enter a title.";
     }
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm the password.";
-    } else{
-        $confirm_password = trim($_POST["confirm_password"]);
-        if(empty($new_password_err) && ($new_password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
-        }
+    else{
+        $title = trim($_POST["title"]);
     }
-    if(empty($new_password_err) && empty($confirm_password_err)){
-        $sql = "UPDATE users SET password = ? WHERE id = ?";
-        
+    if(empty(trim($_POST["content"]))){
+        $content_err= "Pleaser enter content.";
+    }
+    else{
+        $content = trim($_POST["content"]);
+    }
+    if(empty($title_err) && empty($content_err)){
+        $sql = "INSERT INTO request(title, content) VALUES(?, ?)";
         if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param("si", $param_password, $param_id);
-            $param_password = password_hash($new_password, PASSWORD_DEFAULT);
-            $param_id = $_SESSION["id"];
+          $stmt->bind_param("ss", $param_title, $param_content );
+          $param_title = $title;
+          $param_content = $content;
             if($stmt->execute()){
-                session_destroy();
-                header("location: login.php");
-                exit();
+                header("location: main.php");
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                echo "Something went wrong. Please try again later.";
             }
             $stmt->close();
         }
     }
-    $mysqli->close();
 }
 ?>
- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Change Password</title>
+    <title>Request-Complaint</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -64,7 +61,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </script>
 </head>
 <body>
-   <nav class="navbar navbar-expand-sm">
+    <nav class="navbar navbar-expand-sm">
     <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="main.php">AYDOGAN APT MANAGEMENT |Welcome To AYDOGAN Apartment Management System...</a>
@@ -94,29 +91,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-    <div class="wrapper">
-        <h2>Change Password</h2>
-        <p>Please fill out this form to change your password.</p>
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post"> 
-            <div class="form-group <?php echo (!empty($new_password_err)) ? 'has-error' : ''; ?>">
-                <label>New Password</label>
-                <input type="password" name="new_password" class="form-control" value="<?php echo $new_password; ?>" placeholder="New Password">
-                <span class="help-block"><?php echo $new_password_err; ?></span>
-            </div>
-            <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
-                <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password">
-                <span class="help-block"><?php echo $confirm_password_err; ?></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                <a class="btn btn-danger" href="welcome.php">Cancel</a>
-            </div>
-        </form>
-    </div>
-     </main> 
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <div class="container">
+         <div class="form-group <?php echo (!empty($title_err)) ? 'has-error' : ''; ?>">
+          <label for="textarea">Request or Complaint Title</label>
+           <input class="form-control" type="text" name="title" value="<?php echo $title; ?>" placeholder="Enter a title">
+           <span class="help-block"><?php echo $title_err; ?></span>
+         </div>
+          <div class="form-group <?php echo (!empty($content_err)) ? 'has-error' : ''; ?>">
+           
+           <label for="content">Request or Complaint Content</label>
+            <input class="form-control" type="text" name="content" value="<?php echo $content; ?>" placeholder="Enter a subject">
+            <span class="help-block"><?php echo $content_err; ?></span>
+          </div>
+            
+            <button class="btn btn-primary" value="Submit">Submit</button>
+             <a href="main.php" class="btn btn-danger">Back</a>  
+        </div>
+    </form>
+                    
+      
+</main> 
 </section>
    </div>      
-    <footer>Bilal AYDOGAN &copy; | 2020-2021</footer>    
+    <footer>Bilal AYDOGAN &copy; | 2020-2021</footer>
 </body>
 </html>

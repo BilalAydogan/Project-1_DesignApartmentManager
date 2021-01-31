@@ -74,30 +74,99 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <head>
     <meta charset="UTF-8">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
-    <style type="text/css">
+    
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript">
+    function login(){
+        window.location="adminwelcome.php"
+    }
+    function register(){
+        window.location="register.php"
+    }
+    function homepage(){
+        window.location="adminmain.php"     
+    }
+    function adminreg(){
+        window.location="adminregister.php"
+    }
+    function allmember(){
+        window.location="allmember.php"
+    }
+    function leaving(){
+        window.location="leaving.php"
+    }
+    function announcement(){
+        window.location="announcement.php"
+    }
+    </script>
+       <style type="text/css">
         body{ font: 14px sans-serif; }
         .wrapper{ width: 350px; padding: 20px; }
     </style>
 </head>
 <body>
+       <nav class="navbar navbar-expand-sm bg-light">
+    <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="adminmain.php">AYDOGAN APT MANAGEMENT |Welcome To AYDOGAN Apartment Management System...</a>
+    </div>
+   
+    <i class="fas fa-search"></i>
+    <i class="fab fa-facebook"></i>
+    <i class="fab fa-instagram"></i>
+    <button type="button" class="btn btn-light" onclick="login()">My Profile!</button>
+    <button type="button" class="btn btn-light" onclick="announcement()">Make Announcement</button>
+    <button type="button" class="btn btn-light" onclick="allmember()">All Member</button>
+    <button type="button" class="btn btn-light" onclick="leaving()">Leaving Users</button>
+    <button type="button" class="btn btn-light" onclick="register()">User Register</button>
+    <button type="button" class="btn btn-light" onclick="adminreg()">Admin Register</button>
+    
+    </div>
+    </nav>
+<div id="container">
+<section>
+            <nav class="navbar navbar-expand-sm bg-light">
+                <ul>
+                    <li><a href="adminmain.php"><i class="fas fa-home"></i>Home Page</a></li>
+                    <li><a href="updatedues.php"><i class="fas fa-wallet"></i>Add Dues</a></li>
+                    <li><a href="alldues.php"><i class="fas fa-list"></i>All Dues History</a></li>
+                    <li><a href="adminpay.php"><i class="fas fa-lira-sign"></i>Pay DUes</a></li>
+                    <li><a href="income.php"><i class="fas fa-lira-sign"></i>Income-Expense</a></li>
+                    <li><a href="showrequest.php"><i class="fas fa-box-open"></i>Request-Complaint</a></li>
+                    <li><a href="expense.php"><i class="fas fa-box-open"></i>Expense</a></li>
+                    <li><a href="showexpense.php"><i class="fas fa-box-open"></i>Show Expense</a></li>
+                </ul>
+                
+            </nav>
+            
+<main>
+<header> 
+    <img id="headerimg" src="img/img1.jpeg" alt="">
+    <div id="centered"> AYDOGAN APARTMENT </div>
+</header>
     <div class="wrapper">
         <h2>Sign Up</h2>
-        <p>Please fill this form to create an account.</p>
+        <p>Please fill this form to create an ADMIN account.</p>
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+                <input type="text" name="username" class="form-control" value="<?php echo $username; ?>" placeholder="Admin User Name">
                 <span class="help-block"><?php echo $username_err; ?></span>
             </div>    
             <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control" value="<?php echo $password; ?>">
+                <input type="password" name="password" class="form-control" value="<?php echo $password; ?>" placeholder="Admin Password">
                 <span class="help-block"><?php echo $password_err; ?></span>
             </div>
             <div class="form-group <?php echo (!empty($confirm_password_err)) ? 'has-error' : ''; ?>">
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>">
+                <input type="password" name="confirm_password" class="form-control" value="<?php echo $confirm_password; ?>" placeholder="Confirm Password">
                 <span class="help-block"><?php echo $confirm_password_err; ?></span>
             </div>
         
@@ -108,5 +177,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             </div>
         </form>
     </div>    
+</body>
+</main>
+            
+</section>
+        
+</div>
+    <footer>Bilal AYDOGAN &copy; | 2020-2021</footer>
 </body>
 </html>

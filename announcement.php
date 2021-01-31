@@ -54,21 +54,81 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript">
-    </script>  
+    function login(){
+        window.location="adminwelcome.php"
+    }
+    function register(){
+        window.location="register.php"
+    }
+    function homepage(){
+        window.location="adminmain.php"     
+    }
+    function adminreg(){
+        window.location="adminregister.php"
+    }
+    function allmember(){
+        window.location="allmember.php"
+    }
+    function leaving(){
+        window.location="leaving.php"
+    }
+    function announcement(){
+        window.location="announcement.php"
+    }
+    </script>
     
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm bg-light">
+    <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="adminmain.php">AYDOGAN APT MANAGEMENT |Welcome To AYDOGAN Apartment Management System...</a>
+    </div>
+   
+    <i class="fas fa-search"></i>
+    <i class="fab fa-facebook"></i>
+    <i class="fab fa-instagram"></i>
+    <button type="button" class="btn btn-light" onclick="login()">My Profile!</button>
+    <button type="button" class="btn btn-light" onclick="announcement()">Make Announcement</button>
+    <button type="button" class="btn btn-light" onclick="allmember()">All Member</button>
+    <button type="button" class="btn btn-light" onclick="leaving()">Leaving Users</button>
+    <button type="button" class="btn btn-light" onclick="register()">User Register</button>
+    <button type="button" class="btn btn-light" onclick="adminreg()">Admin Register</button>
+    
+    </div>
+    </nav>
+    <div id="container">
+    <section>
+            <nav class="navbar navbar-expand-sm bg-light">
+                <ul>
+                    <li><a href="adminmain.php"><i class="fas fa-home"></i>Home Page</a></li>
+                    <li><a href="updatedues.php"><i class="fas fa-wallet"></i>Add Dues</a></li>
+                    <li><a href="alldues.php"><i class="fas fa-list"></i>All Dues History</a></li>
+                    <li><a href="adminpay.php"><i class="fas fa-lira-sign"></i>Pay DUes</a></li>
+                    <li><a href="income.php"><i class="fas fa-lira-sign"></i>Income-Expense</a></li>
+                    <li><a href="showrequest.php"><i class="fas fa-box-open"></i>Request-Complaint</a></li>
+                    <li><a href="expense.php"><i class="fas fa-box-open"></i>Expense</a></li>
+                    <li><a href="showexpense.php"><i class="fas fa-box-open"></i>Show Expense</a></li>
+                </ul>
+                
+            </nav>
+            
+    <main>
+        <header> 
+    <img id="headerimg" src="img/img1.jpeg" alt="">
+    <div id="centered"> AYDOGAN APARTMENT </div>
+    </header>
      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="container">
          <div class="form-group <?php echo (!empty($title_err)) ? 'has-error' : ''; ?>">
           <label for="textarea">Title</label>
-           <input type="text" name="title" value="<?php echo $title; ?>">
+           <input class="form-control" type="text" name="title" value="<?php echo $title; ?>" placeholder="Enter a title">
            <span class="help-block"><?php echo $title_err; ?></span>
          </div>
           <div class="form-group <?php echo (!empty($content_err)) ? 'has-error' : ''; ?>">
            
            <label for="content">Subject Content</label>
-            <input type="text" name="content" value="<?php echo $content; ?>">
+            <input class="form-control" type="text" name="content" value="<?php echo $content; ?>" placeholder="Enter a subject">
             <span class="help-block"><?php echo $content_err; ?></span>
           </div>
             
@@ -76,7 +136,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
              <a href="adminmain.php" class="btn btn-danger">Back</a>  
         </div>
     </form>
- 
-</body>  
+    </main>
+ </section>
+ </div> 
+</body> 
 
+<footer>Bilal AYDOGAN &copy; | 2020-2021</footer>
 </html>

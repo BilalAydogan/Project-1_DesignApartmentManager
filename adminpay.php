@@ -6,11 +6,51 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
 }
 require_once "config.php";
 ?>
+<?php
+require_once "config.php";
+ $paydues = $username= $year=$month="";
+ $paydues_err="";
+ if($_SERVER["REQUEST_METHOD"] == "POST"){
+     if(empty(trim($_POST["paydues"]))){
+         $paydues_err="Please enter dues";
+     }
+     else{
+         $paydues=trim($_POST["paydues"]);
+     }
+     if(!empty(trim($_SESSION["username"]))){
+         $username=trim($_SESSION["username"]);
+     }
+     if(!empty(trim($_POST["year"]))){
+         $year=trim($_POST["year"]);
+     }
+     if(!empty(trim($_POST["month"]))){
+         $month=trim($_POST["month"]);
+     }
+     
+     if(empty($paydues_err)){
+         $username = $_POST['username'];
+         $year=$_POST['year'];
+         $month=$_POST['month'];
+         $paydues=$_POST['paydues'];
+         $sql="UPDATE users SET dues = dues-$paydues WHERE username='$username'";
+         $sql1="INSERT INTO duespaid (username, month, year, paydues) VALUES ('$username','$month','$year','$paydues')";
+         if(mysqli_query($mysqli,$sql)){
+             if(mysqli_query($mysqli,$sql1)){
+                 header("location: adminwelcome.php");
+             }
+         }
+         else{
+             header("location: adminmain.php");
+         }
+     }
+     
+ }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Main Page</title>
+    <title>Admin Pay</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -83,53 +123,45 @@ require_once "config.php";
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-       
-    <div class="container">
-       <div class="row  justify-content-center">
-          <div class="col">
-             <table class="table table-bordered table-striped table-white">
-                 <tr>
-                     <td>User Id</td>    
-                     <td>User Name</td>
-                     <td>Door Number</td>
-                     <td>User Phone 1</td>
-                     <td>User phone 2</td>
-                     <td>Dues</td>
-                     <td>Joining Time</td>
-                     <td>Leaving Time</td>
-                 </tr>
-                 
-                 <?php
-                    $sql = "SELECT * FROM leavingusers;";
-                    $result = mysqli_query($mysqli, $sql);
-                    $rescheck = mysqli_num_rows($result);
-
-                if($rescheck > 0){
-                    while($row = mysqli_fetch_assoc($result)){
-                        
-                        echo "<tr>";
-                        echo "<td>".$row['id']."</td>";
-                        echo "<td>".$row['username']."</td>";
-                        echo "<td>".$row['doornumber']."</td>";
-                        echo "<td>".$row['userphone1']."</td>";
-                        echo "<td>".$row['userphone2']."</td>";
-                        echo "<td>".$row['dues']."</td>";
-                        echo "<td>".$row['created_at']."</td>";
-                        echo "<td>".$row['leaving_time']."</td>";
-                        }
-                    }
-
-                ?>
-             </table>
-              
-          </div>
-           
+      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+   <div class="wrapper">
+   <div class="form-group ">
+                <label>User Name</label>
+                <input type="text" name="username" class="form-control" placeholder="User Name">
+           </div>
+           <div class="form-group" >
+            <label >Please Choose Month</label>
+            <select name="month" class="form-control">
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April </option>
+              <option value="May">May </option>
+              <option value="June">June </option>
+              <option value="July">July </option>
+              <option value="August">August </option> 
+              <option value="September">September </option>
+              <option value="October">October </option>
+              <option value="November">November </option>
+              <option value="December">December </option>
+            </select>
+            </div>
+            <div class="form-group ">
+                <label>Year</label>
+                <input type="text" name="year" class="form-control" value="2021"onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+           </div>
+       <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
+                <label >Pay Dues</label>
+                <input type="text" name="paydues" class="form-control" placeholder="Please Enter a Dues" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
+                <span class="label label-danger"><?php echo $paydues_err; ?></span>
        </div>
-        
+       
+   </div>
+   <div class="form-group">
+    <input type="submit" class="btn btn-primary" value="Submit">
+    <a href="welcome.php" class="btn btn-danger">Back</a>
     </div>
-    <div class="container" >
-    <a href="adminmain.php" class="btn btn-primary">Back</a>
-    </div>
+    </form>  
 </main>
             
 </section>

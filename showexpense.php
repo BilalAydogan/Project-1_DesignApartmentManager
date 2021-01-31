@@ -83,53 +83,34 @@ require_once "config.php";
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-       
-    <div class="container">
-       <div class="row  justify-content-center">
-          <div class="col">
-             <table class="table table-bordered table-striped table-white">
-                 <tr>
-                     <td>User Id</td>    
-                     <td>User Name</td>
-                     <td>Door Number</td>
-                     <td>User Phone 1</td>
-                     <td>User phone 2</td>
-                     <td>Dues</td>
-                     <td>Joining Time</td>
-                     <td>Leaving Time</td>
-                 </tr>
-                 
-                 <?php
-                    $sql = "SELECT * FROM leavingusers;";
-                    $result = mysqli_query($mysqli, $sql);
-                    $rescheck = mysqli_num_rows($result);
+        <div class="announcement">
 
-                if($rescheck > 0){
-                    while($row = mysqli_fetch_assoc($result)){
-                        
-                        echo "<tr>";
-                        echo "<td>".$row['id']."</td>";
-                        echo "<td>".$row['username']."</td>";
-                        echo "<td>".$row['doornumber']."</td>";
-                        echo "<td>".$row['userphone1']."</td>";
-                        echo "<td>".$row['userphone2']."</td>";
-                        echo "<td>".$row['dues']."</td>";
-                        echo "<td>".$row['created_at']."</td>";
-                        echo "<td>".$row['leaving_time']."</td>";
-                        }
-                    }
+            <h5>Expenses of Aparment</h5>
+                                <table class="table table-bordered table-striped table-white">
+                                     <tr>
+                                         <td>Expense Name</td>    
+                                         <td>Cost</td>
+                                    </tr>
+                                    
+                                <?php
+                                    require_once "config.php";
+                                    $sql = "SELECT expensename, cost FROM expense ORDER BY created_at DESC;";
+                                    $result = mysqli_query($mysqli, $sql);
+                                    $rescheck = mysqli_num_rows($result);
 
-                ?>
-             </table>
-              
-          </div>
-           
-       </div>
-        
-    </div>
-    <div class="container" >
-    <a href="adminmain.php" class="btn btn-primary">Back</a>
-    </div>
+                                if($rescheck > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+
+                                        echo "<tr>";
+                                        echo "<td>".$row['expensename']."</td>";
+                                        echo "<td>".$row['cost']." ₺"."</td>";
+                                        echo "</tr>";
+                                        }
+                                    }
+
+                                ?>
+                               </table>
+                               </div>
 </main>
             
 </section>

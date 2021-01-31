@@ -1,10 +1,9 @@
 <?php
 session_start();
-if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-require_once "config.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,65 +17,37 @@ require_once "config.php";
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
+    <link rel="stylesheet" href="style.css">
     <script type="text/javascript">
     function login(){
-        window.location="adminwelcome.php"
-    }
-    function register(){
-        window.location="register.php"
-    }
-    function homepage(){
-        window.location="adminmain.php"     
-    }
-    function adminreg(){
-        window.location="adminregister.php"
-    }
-    function allmember(){
-        window.location="allmember.php"
-    }
-    function leaving(){
-        window.location="leaving.php"
-    }
-    function announcement(){
-        window.location="announcement.php"
+        window.location="welcome.php"
     }
     </script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-light">
+    <nav class="navbar navbar-expand-sm">
     <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="adminmain.php">AYDOGAN APT MANAGEMENT |Welcome To AYDOGAN Apartment Management System...</a>
+      <a class="navbar-brand" href="main.php">AYDOGAN APT MANAGEMENT |Welcome To AYDOGAN Apartment Management System...</a>
     </div>
    
     <i class="fas fa-search"></i>
     <i class="fab fa-facebook"></i>
     <i class="fab fa-instagram"></i>
     <button type="button" class="btn btn-light" onclick="login()">My Profile!</button>
-    <button type="button" class="btn btn-light" onclick="announcement()">Make Announcement</button>
-    <button type="button" class="btn btn-light" onclick="allmember()">All Member</button>
-    <button type="button" class="btn btn-light" onclick="leaving()">Leaving Users</button>
-    <button type="button" class="btn btn-light" onclick="register()">User Register</button>
-    <button type="button" class="btn btn-light" onclick="adminreg()">Admin Register</button>
-    
     </div>
     </nav>
+    
 <div id="container">
 <section>
             <nav class="navbar navbar-expand-sm bg-light">
                 <ul>
-                    <li><a href="adminmain.php"><i class="fas fa-home"></i>Home Page</a></li>
-                    <li><a href="updatedues.php"><i class="fas fa-wallet"></i>Add Dues</a></li>
-                    <li><a href="alldues.php"><i class="fas fa-list"></i>All Dues History</a></li>
-                    <li><a href="adminpay.php"><i class="fas fa-lira-sign"></i>Pay DUes</a></li>
-                    <li><a href="income.php"><i class="fas fa-lira-sign"></i>Income-Expense</a></li>
-                    <li><a href="showrequest.php"><i class="fas fa-box-open"></i>Request-Complaint</a></li>
-                    <li><a href="expense.php"><i class="fas fa-box-open"></i>Expense</a></li>
-                    <li><a href="showexpense.php"><i class="fas fa-box-open"></i>Show Expense</a></li>
-                    
+                    <li><a href="main.php"><i class="fas fa-home"></i>Home Page</a></li>
+                    <li><a href="showdues.php"><i class="fas fa-wallet"></i>Show All Paid Dues</a></li>
+                    <li><a href="request.php"><i class="fas fa-box-open"></i>Request-Complaint</a></li>
+                    <li><a href="showexpenseuser.php"><i class="fas fa-box-open"></i>Expenses of Aparment</a></li>
+                    <li><a href="showincome.php"><i class="fas fa-box-open"></i>Income-Expense</a></li>
                 </ul>
-                
             </nav>
             
 <main>
@@ -84,18 +55,18 @@ require_once "config.php";
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-        <div class="announcement">
+   <div class="announcement">
 
-            <h5>Announcements</h5>
+            <h5>Expenses of Apartment</h5>
                                 <table class="table table-bordered table-striped table-white">
                                      <tr>
-                                         <td>Title</td>    
-                                         <td>Content</td>
+                                         <td>Expense Name</td>    
+                                         <td>Cost</td>
                                     </tr>
                                     
                                 <?php
                                     require_once "config.php";
-                                    $sql = "SELECT title, content, updatedues FROM announcement ORDER BY created_at DESC;";
+                                    $sql = "SELECT expensename, cost FROM expense ORDER BY created_at DESC;";
                                     $result = mysqli_query($mysqli, $sql);
                                     $rescheck = mysqli_num_rows($result);
 
@@ -103,20 +74,20 @@ require_once "config.php";
                                     while($row = mysqli_fetch_assoc($result)){
 
                                         echo "<tr>";
-                                        echo "<td>".$row['title']."</td>";
-                                        echo "<td>".$row['content']."</td>";
+                                        echo "<td>".$row['expensename']."</td>";
+                                        echo "<td>".$row['cost']." ₺"."</td>";
                                         echo "</tr>";
                                         }
                                     }
 
                                 ?>
                                </table>
-                               </div>
-</main>
-            
+                               </div>     
+                    
+      
+</main> 
 </section>
-        
-</div>
+   </div>      
     <footer>Bilal AYDOGAN &copy; | 2020-2021</footer>
 </body>
 </html>

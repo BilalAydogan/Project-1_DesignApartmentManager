@@ -55,35 +55,58 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <img id="headerimg" src="img/img1.jpeg" alt="">
     <div id="centered"> AYDOGAN APARTMENT </div>
 </header>
-        <div class="announcement">
+        <div class="container">
+       <div class="row  justify-content-center">
+          <div class="col">
+             <table class="table table-bordered table-striped table-white">
+   <tr>
+       <td>Total Expected Income</td>
+       <td>Total Money Currently Owned</td>
+   </tr>
+                <?php
+                    require_once "config.php";
+                    $sql = "SELECT SUM(dues) as all_income FROM users";
+                                $result = mysqli_query($mysqli, $sql);
+                                $rescheck = mysqli_num_rows($result);
 
-            <h5>Announcements</h5>
-              
-                            <div class="modal-body">
-                                <table class="table table-bordered table-striped table-white">
-                                     <tr>
-                                         <td>Title</td>    
-                                         <td>Content</td>
-                                    </tr> 
-                                <?php
-                                    require_once "config.php";
-                                    $sql = "SELECT title, content, updatedues FROM announcement ORDER BY created_at DESC;";
-                                    $result = mysqli_query($mysqli, $sql);
-                                    $rescheck = mysqli_num_rows($result);
+                            if($rescheck > 0){
+                                while($row = mysqli_fetch_assoc($result)){
+                                       echo "<td>".$row['all_income']." ₺"."</td>";
 
-                                if($rescheck > 0){
-                                    while($row = mysqli_fetch_assoc($result)){
+                                }
+                                }
+                ?>
+                <?php
+                  $sql = "SELECT SUM(paydues) as all_income FROM duespaid";
+                    $result = mysqli_query($mysqli, $sql);
+                    $rescheck = mysqli_num_rows($result);
+    
+                if($rescheck > 0){
+                    while($row = mysqli_fetch_assoc($result)){
+                           $x=$row['all_income'];
+                       
+                    }
+                    }
+                    $sql = "SELECT SUM(cost) as all_income FROM expense";
+                    $result = mysqli_query($mysqli, $sql);
+                    $rescheck = mysqli_num_rows($result);
+    
+                if($rescheck > 0){
+                    while($row = mysqli_fetch_assoc($result)){
+                           $y=$row['all_income'];
+                       
+                    }
+                    }
+                 $z = $x-$y;
+                 echo "<td>".$z." ₺"."</td>";
+                 ?>
 
-                                        echo "<tr>";
-                                        echo "<td>".$row['title']."</td>";
-                                        echo "<td>".$row['content']."</td>";
-                                        echo "</tr>";
-                                        }
-                                    }
-                                ?>
-                                </table>
-                               </div>
-                    </div>
+               
+               
+        </table>
+          </div>
+       </div>
+       </div>
                     
       
 </main> 
