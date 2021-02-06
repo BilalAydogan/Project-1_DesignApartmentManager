@@ -8,8 +8,8 @@ if(!isset($_SESSION["adminloggedin"]) || $_SESSION["adminloggedin"] !== true){
 
 <?php
 require_once "config.php";
- $updatedues ="";
- $updatedues_err="";
+ $updatedues = $duesname = $month= $year="";
+ $updatedues_err= $duesname_err =$month_err=$year_err="";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
      if(empty(trim($_POST["updatedues"]))){
          $updatedues_err="Please enter dues";
@@ -17,22 +17,44 @@ require_once "config.php";
      else{
          $updatedues=trim($_POST["updatedues"]);
      }
-     
-     if(empty($updatedues_err)){
-         $sql="UPDATE users SET dues = dues+$updatedues";
-         if($stmt = $mysqli->prepare($sql)){
-             $stmt->bind_param("i", $param_updatedues);
-             $param_updatedues=updatedues;
-             if($stmt->execute()){
-                header("location: allmember.php");
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
-            $stmt->close();
-         }
+     if(empty(trim($_POST["duesname"]))){
+         $duesname_err="Please enter dues name";
      }
-     $mysqli->close();
+     else{
+         $duesname=trim($_POST["duesname"]);
+     }
+     if(empty(trim($_POST["month"]))){
+         $month_err="Please enter month";
+     }
+     else{
+         $month=trim($_POST["month"]);
+     }
+     if(empty(trim($_POST["year"]))){
+         $year_err="Please enter year";
+     }
+     else{
+         $year=trim($_POST["year"]);
+     }
      
+     if(empty($updatedues_err)&&empty($duesname_err)&&empty($month_err)&&empty($year_err)){
+            $sql = "SELECT username FROM users";
+                $result = mysqli_query($mysqli, $sql);
+                $rescheck = mysqli_num_rows($result);
+            if($rescheck > 0){
+                while($row = mysqli_fetch_assoc($result)){
+                    $uname = $row['username'];
+$sql2 = "INSERT INTO dues(username,updatedues,duesname,month,year) VALUES('$uname','$updatedues','$duesname','$month','$year')";
+                $run = mysqli_query($mysqli,$sql2);
+                    if($run){
+                        header("location:adminmain.php");
+                    }
+                    else{
+                        echo "something wrong";
+                    }
+            }
+         
+     }
+ }
  }
 ?>
 <!DOCTYPE html>
@@ -116,10 +138,37 @@ require_once "config.php";
 </header>
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
    <div class="wrapper">
-   <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
-                <label>Add Dues</label>
+   
+    <div class="form-group <?php echo (!empty($duesname_err)) ? 'has-error' : ''; ?>">
+                <label>Dues Name</label>
+                <input type="text" name="duesname" class="form-control" placeholder="Please enter a dues name.">
+                <span class="help-block"><?php echo $duesname_err; ?></span>
+    </div>
+    <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
+                <label>Dues Price</label>
                 <input type="text" name="updatedues" class="form-control" placeholder="Please enter a due."onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
                 <span class="help-block"><?php echo $updatedues_err; ?></span>
+    </div>
+    <div class="form-group" >
+            <label >Please Choose Month</label>
+            <select name="month" class="form-control">
+              <option value="January">January</option>
+              <option value="February">February</option>
+              <option value="March">March</option>
+              <option value="April">April </option>
+              <option value="May">May </option>
+              <option value="June">June </option>
+              <option value="July">July </option>
+              <option value="August">August </option> 
+              <option value="September">September </option>
+              <option value="October">October </option>
+              <option value="November">November </option>
+              <option value="December">December </option>
+            </select>
+            </div>
+    <div class="form-group">
+                <label>Year</label>
+                <input type="text" name="year" class="form-control" value="2021" placeholder="Please enter a due.">
     </div>
    </div>
    <div class="form-group">
