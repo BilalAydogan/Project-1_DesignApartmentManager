@@ -73,7 +73,7 @@ require_once "config.php";
                  
                  <?php
                     $username = $_SESSION['username'];
-                    $sql = "SELECT id, username, month, year, paydues, created_at FROM duespaid WHERE username='$username';";
+                    $sql = "SELECT id, username, month, year, updatedues, ispaid,paidtime FROM dues WHERE username='$username' AND ispaid='1';";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
 
@@ -84,8 +84,8 @@ require_once "config.php";
                         echo "<td>".$row['username']."</td>";
                         echo "<td>".$row['month']."</td>";
                         echo "<td>".$row['year']."</td>";
-                        echo "<td>".$row['paydues']." ₺"."</td>";
-                        echo "<td>".$row['created_at']."</td>"; 
+                        echo "<td>".$row['updatedues']." ₺"."</td>";
+                        echo "<td>".$row['paidtime']."</td>"; 
                         }
                     }
 

@@ -9,14 +9,8 @@ require_once "config.php";
 <?php
 require_once "config.php";
  $paydues = $username= $year=$month="";
- $paydues_err="";
+ $paydues_err= $dues_err="";
  if($_SERVER["REQUEST_METHOD"] == "POST"){
-     if(empty(trim($_POST["paydues"]))){
-         $paydues_err="Please enter dues";
-     }
-     else{
-         $paydues=trim($_POST["paydues"]);
-     }
      if(!empty(trim($_SESSION["username"]))){
          $username=trim($_SESSION["username"]);
      }
@@ -31,17 +25,27 @@ require_once "config.php";
          $username = $_POST['username'];
          $year=$_POST['year'];
          $month=$_POST['month'];
-         $paydues=$_POST['paydues'];
-         $sql="UPDATE users SET dues = dues-$paydues WHERE username='$username'";
-         $sql1="INSERT INTO duespaid (username, month, year, paydues) VALUES ('$username','$month','$year','$paydues')";
-         if(mysqli_query($mysqli,$sql)){
-             if(mysqli_query($mysqli,$sql1)){
-                 header("location: adminwelcome.php");
-             }
-         }
-         else{
-             header("location: adminmain.php");
-         }
+         $paid = 1;
+         $cont = "SELECT username,month,year FROM dues WHERE username='$username' AND month='$month' AND year='$year'";
+         $result = mysqli_query($mysqli, $cont);
+                $rescheck = mysqli_num_rows($result);
+                if($rescheck > 0){
+                    $sql1 ="UPDATE dues SET paidtime= now() WHERE username='$username' AND month='$month' AND year='$year'";
+                         $sql="UPDATE dues SET ispaid = $paid WHERE username='$username' AND month='$month' AND year='$year'";
+
+                         if(mysqli_query($mysqli,$sql1)){
+                             if(mysqli_query($mysqli,$sql)){
+                                 header("location: adminwelcome.php");
+                             }
+                         }
+                         else{
+                             header("location: adminmain.php");
+                         }
+                }
+            else{
+                $dues_err= "There is no such dues";
+            }
+         
      }
      
  }
@@ -125,41 +129,45 @@ require_once "config.php";
 </header>
       <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
    <div class="wrapper">
-   <div class="form-group ">
-                <label>User Name</label>
-                <input type="text" name="username" class="form-control" placeholder="User Name">
-           </div>
-           <div class="form-group" >
-            <label >Please Choose Month</label>
-            <select name="month" class="form-control">
-              <option value="January">January</option>
-              <option value="February">February</option>
-              <option value="March">March</option>
-              <option value="April">April </option>
-              <option value="May">May </option>
-              <option value="June">June </option>
-              <option value="July">July </option>
-              <option value="August">August </option> 
-              <option value="September">September </option>
-              <option value="October">October </option>
-              <option value="November">November </option>
-              <option value="December">December </option>
-            </select>
-            </div>
-            <div class="form-group ">
-                <label>Year</label>
-                <input type="text" name="year" class="form-control" value="2021"onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-           </div>
-       <div class="form-group <?php echo (!empty($updatedues_err)) ? 'has-error' : ''; ?>">
-                <label >Pay Dues</label>
-                <input type="text" name="paydues" class="form-control" placeholder="Please Enter a Dues" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');">
-                <span class="label label-danger"><?php echo $paydues_err; ?></span>
-       </div>
+   <div class="form-group">
+      <h5>All Dues</h5>
+                                <table class="table table-bordered table-striped table-white">
+                                     <tr>
+                                         <td>User Name</td>    
+                                         <td>Motnh</td>
+                                         <td>Year</td>
+                                         <td>Dues</td>
+                                         <td>Pay</td>
+                                    </tr>
+                                    
+                                <?php
+                                    require_once "config.php";
+                                    $sql = "SELECT id, username, month, year, updatedues FROM dues WHERE ispaid='0';";
+                                    $result = mysqli_query($mysqli, $sql);
+                                    $rescheck = mysqli_num_rows($result);
+
+                                if($rescheck > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+
+                                        echo "<tr>";
+                                        echo "<td>".$row['username']."</td>";
+                                        echo "<td>".$row['month']."</td>";
+                                        echo "<td>".$row['year']."</td>";
+                                        echo "<td>".$row['updatedues']."</td>";
+                                        echo "<td><a href=adminpaydue.php?id=".$row['id'].">Pay Due</a></td>";
+                                        echo "</tr>";
+                                        }
+                                    }
+
+                                ?>
+                               </table>
        
+   </div> 
    </div>
    <div class="form-group">
     <input type="submit" class="btn btn-primary" value="Submit">
-    <a href="welcome.php" class="btn btn-danger">Back</a>
+    <a href="adminmain.php" class="btn btn-danger">Back</a>
+    
     </div>
     </form>  
 </main>

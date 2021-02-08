@@ -89,8 +89,7 @@ require_once "config.php";
        <div class="row  justify-content-center">
           <div class="col">
              <table class="table table-bordered table-striped table-white">
-                 <tr>
-                     <td>User Id</td>    
+                 <tr>   
                      <td>User Name</td>
                      <td>Month</td>
                      <td>Year</td>
@@ -100,7 +99,7 @@ require_once "config.php";
                  
                  <?php
                     $username = $_SESSION['username'];
-                    $sql = "SELECT id, username, month, year, paydues, created_at FROM duespaid ORDER BY username;";
+                    $sql = "SELECT username, month, year, updatedues, paidtime FROM dues WHERE ispaid='1' ORDER BY username;";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
 
@@ -108,12 +107,11 @@ require_once "config.php";
                     while($row = mysqli_fetch_assoc($result)){
                         
                         echo "<tr>";
-                        echo "<td>".$row['id']."</td>";
                         echo "<td>".$row['username']."</td>";
                         echo "<td>".$row['month']."</td>";
                         echo "<td>".$row['year']."</td>";
-                        echo "<td>".$row['paydues']." TL"."</td>";
-                        echo "<td>".$row['created_at']."</td>"; 
+                        echo "<td>".$row['updatedues']." TL"."</td>";
+                        echo "<td>".$row['paidtime']."</td>"; 
                         }
                     }
 

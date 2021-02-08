@@ -65,7 +65,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
    </tr>
                 <?php
                     require_once "config.php";
-                    $sql = "SELECT SUM(dues) as all_income FROM users";
+                    $sql = "SELECT SUM(updatedues) as all_income FROM dues WHERE ispaid='0'";
                                 $result = mysqli_query($mysqli, $sql);
                                 $rescheck = mysqli_num_rows($result);
 
@@ -77,7 +77,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 }
                 ?>
                 <?php
-                  $sql = "SELECT SUM(paydues) as all_income FROM duespaid";
+                  $sql = "SELECT SUM(updatedues) as all_income FROM dues WHERE ispaid='1'";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
     

@@ -93,26 +93,23 @@ require_once "config.php";
                      <td>Door Number</td>
                      <td>User Phone 1</td>
                      <td>User phone 2</td>
-                     <td>Dues</td>
                      <td>Leave the apartment</td>
                  </tr>
                  
                  <?php
-                    $sql = "SELECT id, username, doornumber, userphone1, userphone2, dues FROM users ORDER BY doornumber;";
+                    $sql = "SELECT id, username, doornumber, userphone1, userphone2 FROM users ORDER BY doornumber;";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
 
                 if($rescheck > 0){
                     while($row = mysqli_fetch_assoc($result)){
-                        
                         echo "<tr>";
                         echo "<td>".$row['id']."</td>";
                         echo "<td>".$row['username']."</td>";
                         echo "<td>".$row['doornumber']."</td>";
                         echo "<td>".$row['userphone1']."</td>";
                         echo "<td>".$row['userphone2']."</td>";
-                        echo "<td>".$row['dues']." TL"."</td>";
-                        echo "<td><a href=userdelete.php?id=".$row['id'].">Remove From Apartment</a></td>"; 
+                        echo "<td><a href=userdelete.php?id=".$row['id'].">Remove From Apartment</a></td>";
                         }
                     }
 

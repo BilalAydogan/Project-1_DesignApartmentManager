@@ -93,7 +93,7 @@ require_once "config.php";
    </tr>
                 <?php
 
-                    $sql = "SELECT SUM(dues) as all_income FROM users";
+                    $sql = "SELECT SUM(updatedues) as all_income FROM dues WHERE ispaid='0'";
                                 $result = mysqli_query($mysqli, $sql);
                                 $rescheck = mysqli_num_rows($result);
 
@@ -105,7 +105,7 @@ require_once "config.php";
                                 }
                 ?>
                 <?php
-                  $sql = "SELECT SUM(paydues) as all_income FROM duespaid";
+                  $sql = "SELECT SUM(updatedues) as all_income FROM dues WHERE ispaid='1'";
                     $result = mysqli_query($mysqli, $sql);
                     $rescheck = mysqli_num_rows($result);
     

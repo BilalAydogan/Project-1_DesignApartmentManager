@@ -37,6 +37,12 @@ require_once "config.php";
      }
      
      if(empty($updatedues_err)&&empty($duesname_err)&&empty($month_err)&&empty($year_err)){
+         $control = "SELECT month year FROM dues WHERE month='$month' AND year='$year'";
+         $result = mysqli_query($mysqli, $control);
+                $rescheck = mysqli_num_rows($result);
+                if($rescheck > 0){
+                    $updatedues_err ="The monthly due has already been determined.";
+                }else{
             $sql = "SELECT username FROM users";
                 $result = mysqli_query($mysqli, $sql);
                 $rescheck = mysqli_num_rows($result);
@@ -54,6 +60,7 @@ $sql2 = "INSERT INTO dues(username,updatedues,duesname,month,year) VALUES('$unam
             }
          
      }
+                    }
  }
  }
 ?>

@@ -60,7 +60,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <h1>Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>. Welcome to Apartment site.</h1>
     </div>
     <p>
-        <a href="paydues.php" class="btn btn-primary">Pay Dues</a>
         <a href="reset-password.php" class="btn btn-warning">Change Your Password</a>
         <a href="logout.php" class="btn btn-danger">Sign Out of Your Account</a>
         <a href="main.php" class="btn btn-danger">Back</a>
@@ -71,17 +70,69 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         require_once "config.php";
        $un = $_SESSION["username"];
         $dues="";
-        $sql = "SELECT dues FROM users WHERE username='$un'";
+        $sql = "SELECT SUM(updatedues) as all_dues FROM dues WHERE username='$un' AND ispaid='0'";
         $result = mysqli_query($mysqli, $sql);
         $rescheck = mysqli_num_rows($result);
         if($rescheck > 0){
             while($row = mysqli_fetch_assoc($result)){
-                $dues=$row['dues'];
+                $dues=$row['all_dues'];
             }   
         }
         
         ?>
         Hi, <b><?php echo htmlspecialchars($_SESSION["username"]); ?></b>.Your unpaid dues <b><?php echo $dues;?> ₺</b>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+              See Details Of Dues
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">All Unpaid Dues</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table table-bordered table-striped table-white">
+                                     <tr>
+                                         <td>User Name</td>    
+                                         <td>Motnh</td>
+                                         <td>Year</td>
+                                         <td>Dues</td>
+                                         <td>Pay</td>
+                                    </tr>
+                                    
+                                <?php
+                                    require_once "config.php";
+                                    $sql = "SELECT id, username, month, year, updatedues FROM dues WHERE username='$un' AND ispaid='0';";
+                                    $result = mysqli_query($mysqli, $sql);
+                                    $rescheck = mysqli_num_rows($result);
+
+                                if($rescheck > 0){
+                                    while($row = mysqli_fetch_assoc($result)){
+
+                                        echo "<tr>";
+                                        echo "<td>".$row['username']."</td>";
+                                        echo "<td>".$row['month']."</td>";
+                                        echo "<td>".$row['year']."</td>";
+                                        echo "<td>".$row['updatedues']." ₺"."</td>";
+                                        echo "<td><a href=userpaydue.php?id=".$row['id'].">Pay Due</a></td>";
+                                        echo "</tr>";
+                                        }
+                                    }
+
+                                ?>
+                               </table>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
     </p>
     </main> 
 </section>
